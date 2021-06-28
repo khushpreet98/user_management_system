@@ -2,6 +2,8 @@ from app import db
 from typing import List
 from .model import User
 from .interface import user_interface
+from sqlalchemy_filters import apply_filters
+import json
 
 
 class user_service:
@@ -15,10 +17,14 @@ class user_service:
         db.session.commit()
         return new_user
 
-    @staticmethod
-    def get_all() -> List[User]:
-        return User.query.all()
 
+    @staticmethod
+    def get_all(filters) -> List[User]:
+        f_query = db.session.query(User)
+        # add filters from list of filter
+        if len(filters) > 0:
+            f_query = apply_filters(f_query, filters)
+        return f_query.all()
 
     @staticmethod
     def get_by_name(first_name:str) -> List[User]:
@@ -39,3 +45,4 @@ class user_service:
         db.session.delete(users)
         db.session.commit()
         return [id]
+

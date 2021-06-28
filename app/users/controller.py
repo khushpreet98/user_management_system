@@ -13,17 +13,7 @@ api = Namespace("User")
 
 
 @api.route("/")
-class StuResource(Resource):
-
-    @responds(schema=user_schema, many=True)
-    def get(self) -> List[User]:
-        args = request.args
-        if "first_name" in args:
-            first_name = args["first_name"]
-            return user_service.get_by_name(first_name)
-        return user_service.get_all()
-
-
+class user_resource(Resource):
     @accepts(schema=user_schema, api=api)
     @responds(schema=user_schema, status_code=201)
     def post(self) -> User:
@@ -38,6 +28,18 @@ class StuResource(Resource):
         user1 = user_service.create(obj)
         resp.headers['id'] = user1.id
         return resp
+
+    @responds(schema=user_schema, many=True)
+    def get(self) -> List[User]:
+        args = request.args
+        filters = list()
+        if "first_name" in args:
+            filters.append({'model': 'User', 'field': 'first_name', 'op': '==', 'value': args["first_name"]})
+        if "last_name" in args:
+            filters.append({'model': 'User', 'field': 'last_name', 'op': '==', 'value': args["last_name"]})
+        return user_service.get_all(filters)
+
+
 
 
 @api.route("/<int:id>")
@@ -60,3 +62,4 @@ class user_id_resource(Resource):
             return jsonify(dict(status="success", id=id))
         else:
             return "error:Id not found", 404
+
