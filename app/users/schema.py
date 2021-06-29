@@ -1,6 +1,6 @@
 from marshmallow import fields, Schema
 
-class user_schema(Schema):
+class UserSchema(Schema):
 
     id = fields.Number(attribute="id")
     first_name = fields.String(attribute="first_name")

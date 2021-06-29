@@ -22,4 +22,4 @@ six==1.16.0
 SQLAlchemy==1.4.18
 Werkzeug==2.0.0
 flask-restx==0.3.0
-sqlalchemy-filters==v0.12.0
+sqlalchemy-filters==0.12.0
