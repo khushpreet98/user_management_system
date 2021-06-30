@@ -12,4 +12,3 @@ class User(db.Model):
     salary = Column(Integer())
     address = Column(String(100))
     created_at = Column(DateTime, default = datetime.utcnow())
-

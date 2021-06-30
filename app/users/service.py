@@ -33,3 +33,4 @@ class UserService:
         db.session.delete(users)
         db.session.commit()
         return [id]
+
