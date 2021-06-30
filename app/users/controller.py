@@ -42,7 +42,7 @@ class UserResource(Resource):
 class UserIdResource(Resource):
     @responds(schema=UserSchema)
     def get(self, id: int) -> User:
-        id = UserSchema.get_by_id(id)
+        id = UserService.get_by_id(id)
         if id:
             return id
         else:
