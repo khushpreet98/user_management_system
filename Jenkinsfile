@@ -19,7 +19,7 @@ pipeline {
                   }
                }
                echo 'Setting environment variables...'
-               sh ("""sudo sed -i '/BACKEND_COMMIT_ID/c\\BACKEND_COMMIT_ID='"${env.IMAGE_TAG}"'' /etc/profile""")
+               sh ("""sudo -S sed -i '/BACKEND_COMMIT_ID/c\\BACKEND_COMMIT_ID='"${env.IMAGE_TAG}"'' /etc/profile""")
                sh ". /etc/profile"
           }
      }
