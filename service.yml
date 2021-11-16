@@ -6,7 +6,7 @@ spec:
   type: NodePort
   ports:
     - port: 5000
-      nodePort: 3003
+      nodePort: 30037
       name: http
   selector:
     app: main 
