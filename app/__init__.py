@@ -20,5 +20,3 @@ def create_app(env=None):
     def health():
         return jsonify("healthy")
     return app
-
-
