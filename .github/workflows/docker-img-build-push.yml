@@ -18,6 +18,6 @@ jobs:
       id: vars
       run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
     - name: Build image
-      run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/user_management_system:${{ steps.vars.outputs.tag }}
+      run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/user_management_system:${{ github.sha }}
     - name: push image
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/user_management_system:${{ steps.vars.outputs.tag }}
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/user_management_system:${{ github.sha }}
