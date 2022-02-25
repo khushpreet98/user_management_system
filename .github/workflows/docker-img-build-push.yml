@@ -14,8 +14,10 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-
+    - name: Get the version
+      id: vars
+      run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
     - name: Build image
-      run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/user_management_system:${{ steps.docker_meta.outputs.tags }} 
+      run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/user_management_system:${{steps.vars.outputs.tag}}
     - name: push image
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/user_management_system:${{ steps.docker_meta.outputs.tags }}
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/user_management_system:${{steps.vars.outputs.tag}}
