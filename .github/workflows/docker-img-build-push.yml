@@ -16,6 +16,6 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build image
-      run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/user_management_system:$(date +%s) 
+      run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/user_management_system:${{ github.sha }} 
     - name: push image
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/user_management_system:$(date +%s),latest
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/user_management_system:${{ github.sha }}
