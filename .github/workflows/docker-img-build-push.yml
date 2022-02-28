@@ -17,6 +17,6 @@ jobs:
         tag_names: true
 
     - name: Build image
-      run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/user_management_system:${{ github.sha }}
+      run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/user_management_system
     - name: push image
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/user_management_system:${{ github.sha }}
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/user_management_system
