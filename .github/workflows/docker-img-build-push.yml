@@ -21,3 +21,21 @@ jobs:
       run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ github.sha }}
     - name: push image
       run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ github.sha }}
+      
+    - name: Check out code
+      uses: actions/checkout@v2      
+      with:
+        repository: https://github.com/khushpreet98/user-management.git
+    - name: Update Kubernetes resources
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      run: yq -i  eval '.images.repository= "${{ secrets.DOCKER_USERNAME }}/user_management_system:$GITHUB_SHA"' values.yaml
+    - name: Commit files
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -am "Bump docker tag"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
