@@ -25,11 +25,11 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v2      
       with:
-        repository: https://github.com/khushpreet98/user-management.git
+        repository: khushpreet98/user-management
     - name: Update Kubernetes resources
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      run: yq -i  eval '.images.repository= "khushpreet98/user_management_system:$GITHUB_SHA"' values.yaml
+      run: yq -i  eval '.images.repository= "${{ secrets.DOCKER_USERNAME }}/user_management_system:$GITHUB_SHA"' values.yaml
     - name: Commit files
       run: |
         git config --local user.email "action@github.com"
