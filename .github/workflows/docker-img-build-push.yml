@@ -6,8 +6,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      commit: ${{ git rev-parse --verify HEAD }}
     steps:
     - name: Check out code
       uses: actions/checkout@v2
@@ -19,7 +17,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         
     - name: Build image
-      run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:$commit
+      run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ git rev-parse --verify HEAD }}
         
     - name: push image
       run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:$commit
