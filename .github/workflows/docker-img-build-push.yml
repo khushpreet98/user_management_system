@@ -26,6 +26,10 @@ jobs:
       uses: actions/checkout@master      
       with:
         repository: khushpreet98/user-management
+        github_token: ${{ secrets.DOCKER_PASSWORD }}
+        ref: refs/heads/master
+
+
     - name: Update Kubernetes resources
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
