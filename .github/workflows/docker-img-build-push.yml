@@ -27,7 +27,7 @@ jobs:
       with:
         repository: khushpreet98/user-management
         github_token: ${{ secrets.DOCKER_PASSWORD }}
-        ref: refs/heads/master
+        target-branch: master
 
 
     - name: Update Kubernetes resources
