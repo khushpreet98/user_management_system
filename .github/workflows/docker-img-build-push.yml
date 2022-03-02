@@ -33,14 +33,15 @@ jobs:
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       run: yq -i  eval '.images.repository= "${{ secrets.DOCKER_USERNAME }}/user_management_system:${{ github.sha }}"' values.yaml
+      
     - name: Commit files
       run: |
         git config --local user.email "khushpreet@wanclouds.net"
         git config --local user.name "khushpreet98"
-        git commit -am "Bump docker tag"
+        git commit -am "update image tag with latest commit id"
         git push origin master
-   #     github_token: ${{ secrets.GITHUB_TOKEN }}
-
+        
+   #   github_token: ${{ secrets.GITHUB_TOKEN }}
   #  - name: Push changes
   #    uses: ad-m/github-push-action@master
   #    with:
