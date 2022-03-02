@@ -39,7 +39,7 @@ jobs:
         git config --local user.name "khushpreet98"
         git commit -am "Bump docker tag"
         git push origin master
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+   #     github_token: ${{ secrets.GITHUB_TOKEN }}
 
   #  - name: Push changes
   #    uses: ad-m/github-push-action@master
