@@ -32,7 +32,7 @@ jobs:
     - name: Update Kubernetes resources
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      run: yq -i  eval '.images.repository= "${{ secrets.DOCKER_USERNAME }}/user_management_system:$GITHUB_SHA"' values.yaml
+      run: yq -i  eval '.images.repository= "${{ secrets.DOCKER_USERNAME }}/user_management_system:${{ github.sha }}"' values.yaml
     - name: Commit files
       run: |
         git config --local user.email "action@github.com"
