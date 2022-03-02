@@ -23,10 +23,11 @@ jobs:
       run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ github.sha }}
       
     - name: Check out code
-      uses: actions/checkout@master      
+      uses: actions/checkout@v2      
       with:
         repository: khushpreet98/user-management
-        ttoken: ${{ secrets.token }}
+        token: ${{ secrets.token }}
+        ref: master
 
     - name: Update Kubernetes resources
       env:
