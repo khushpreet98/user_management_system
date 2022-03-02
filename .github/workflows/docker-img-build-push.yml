@@ -38,7 +38,10 @@ jobs:
         git config --local user.email "khushpreet@wanclouds.net"
         git config --local user.name "khushpreet98"
         git commit -am "Bump docker tag"
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
+        git push origin master
         github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  #  - name: Push changes
+  #    uses: ad-m/github-push-action@master
+  #    with:
+ #       github_token: ${{ secrets.GITHUB_TOKEN }}
