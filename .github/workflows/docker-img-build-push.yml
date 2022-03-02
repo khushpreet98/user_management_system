@@ -20,7 +20,7 @@ jobs:
     - name: Build image
       run: |
         docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ github.sha }}
-        run: docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:testgitops
+        docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:testgitops
 
     - name: push image
       run: |
