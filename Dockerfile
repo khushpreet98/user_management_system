@@ -7,4 +7,3 @@ EXPOSE 5000
 ENTRYPOINT [ "python3" ]
 CMD [ "manage.py seed_db" ]
 CMD [ "main.py" ]
-
