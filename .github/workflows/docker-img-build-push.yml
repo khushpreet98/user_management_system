@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out code
+    - name: Check out to main repository
       uses: actions/checkout@v2
       
     - name: Login to Docker Hub
@@ -22,7 +22,7 @@ jobs:
     - name: push image
       run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ github.sha }}
       
-    - name: Check out code
+    - name: Check out to repository user-management
       uses: actions/checkout@v2      
       with:
         repository: khushpreet98/user-management
@@ -41,8 +41,3 @@ jobs:
         git commit -am "update image tag with latest commit id"
         git push origin master
         
-   #   github_token: ${{ secrets.GITHUB_TOKEN }}
-  #  - name: Push changes
-  #    uses: ad-m/github-push-action@master
-  #    with:
- #       github_token: ${{ secrets.GITHUB_TOKEN }}
