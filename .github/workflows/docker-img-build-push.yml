@@ -26,7 +26,7 @@ jobs:
       uses: actions/checkout@v2      
       with:
         repository: khushpreet98/user-management
-     #   token: ${{ secrets.token }}
+        token: ${{ secrets.token }}
         ref: master
 
     - name: Update Kubernetes resources
@@ -36,8 +36,8 @@ jobs:
       
     - name: Commit files
       run: |
-        git config --local user.email "khushpreet@wanclouds.net"
-        git config --local user.name "khushpreet98"
+        git config user.email "khushpreet@wanclouds.net"
+        git config user.name "khushpreet98"
         git commit -am "update image tag with latest commit id"
         git push origin master
         
