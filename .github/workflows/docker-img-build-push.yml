@@ -23,9 +23,9 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         
     - name: Build image
-      run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ git_sha }}
+      run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ env.git_sha }}
     - name: push image
-      run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ git_sha }}
+      run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ env.git_sha }}
       
     - name: Check out to repository user-management
       uses: actions/checkout@v2      
@@ -37,7 +37,7 @@ jobs:
     - name: Update Kubernetes resources
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      run: yq -i  eval '.images.repository= "${{ secrets.DOCKER_USERNAME }}/user_management_system:${{ git_sha }}"' values.yaml
+      run: yq -i  eval '.images.repository= "${{ secrets.DOCKER_USERNAME }}/user_management_system:${{ env.git_sha }}"' values.yaml
       
     - name: Commit files
       run: |
