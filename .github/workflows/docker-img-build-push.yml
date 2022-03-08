@@ -27,7 +27,7 @@ jobs:
       with:
         repository: khushpreet98/user-management
         token: ${{ secrets.token }}
-     #   ref: master
+        ref: master
 
     - name: Update Kubernetes resources
       env:
