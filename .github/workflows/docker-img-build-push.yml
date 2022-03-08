@@ -33,8 +33,8 @@ jobs:
         ref: master
 
     - name: Update Kubernetes resources
-      env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+    #  env:
+       # DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       run: yq -i  eval '.images.repository= "${{ secrets.DOCKER_USERNAME }}/user_management_system:${{ steps.vars.outputs.sha_short }}"' values.yaml
       
     - name: Commit files
