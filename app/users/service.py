@@ -40,4 +40,3 @@ class UserService:
         users.update(User_change_updates)
         db.session.commit()
         return users
-
