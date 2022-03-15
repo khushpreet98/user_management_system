@@ -32,7 +32,7 @@ jobs:
         
     - name: simple evaluation on master
       if: github.ref == 'refs/heads/master'
-      run: yq -i  eval '.images.repository= "${{ secrets.DOCKER_USERNAME }}/user_management_system:${{ steps.vars.outputs.sha_short }}"' values.yaml
+      run: yq -i  eval '.image.repository= "${{ secrets.DOCKER_USERNAME }}/user_management_system:${{ steps.vars.outputs.sha_short }}"' values-test.yaml
 
     - name: simple evaluation on Dockerfile
       if: github.ref == 'refs/heads/Dockerfile'
