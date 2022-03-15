@@ -4,6 +4,7 @@ from .model import User
 from .interface import UserInterface
 from sqlalchemy_filters import apply_filters
 
+
 class UserService:
     @staticmethod
     def create(new_attrs: UserInterface) -> User:
@@ -34,3 +35,8 @@ class UserService:
         db.session.commit()
         return [id]
 
+    @staticmethod
+    def update(users: User, User_change_updates: UserInterface) -> User:
+        users.update(User_change_updates)
+        db.session.commit()
+        return users
