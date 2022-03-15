@@ -3,7 +3,7 @@ on:
   push:
     branches:
     - master
-    - Dockerfile
+    - 'refs/heads/Dockerfile'
     
 jobs:
   build:
