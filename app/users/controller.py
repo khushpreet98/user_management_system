@@ -42,7 +42,7 @@ class UserResource(Resource):
 class UserIdResource(Resource):
     @responds(schema=UserSchema)
     def get(self, id: int) -> User:
-        id = UserSchema.get_by_id(id)
+        id = UserService.get_by_id(id)
         if id:
             return id
         else:
@@ -55,3 +55,11 @@ class UserIdResource(Resource):
             return jsonify(dict(status="success", id=id))
         else:
             return "error:Id not found", 404
+
+    @accepts(schema=UserSchema, api=api)
+    @responds(schema=UserSchema)
+    def patch(self, id: int) -> User:
+        changes: UserInterface = request.parsed_obj
+        User = UserService.get_by_id(id)
+        return UserService.update(User, changes)
+

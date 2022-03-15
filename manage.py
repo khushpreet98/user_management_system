@@ -26,7 +26,6 @@ def init_db():
 
 @manager.command
 def drop_all():
-    if input("Are you sure you want to drop all tables? (y/N)\n").lower() == "y":
         print("Dropping tables...")
         db.drop_all()
 
