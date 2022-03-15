@@ -43,3 +43,4 @@ jobs:
         git config user.name "khushpreet98"
         git commit -am "update image tag with latest commit id"
         git push origin master
+
