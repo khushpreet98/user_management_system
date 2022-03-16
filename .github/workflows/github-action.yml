@@ -34,7 +34,7 @@ jobs:
         
     - name: update helm manifest in values.yaml
       if: github.ref == 'refs/heads/master'
-      run: yq -i  eval '.images.repository= "${{ secrets.DOCKER_USERNAME }}/user_management_system:${{ tags }}"' values.yaml
+      run: yq -i  eval '.images.repository= "${{ secrets.DOCKER_USERNAME }}/user_management_system:$tags"' values.yaml
 
     - name: update helm manifest in values-test.yaml
       if: github.ref == 'refs/heads/Dockerfile'
