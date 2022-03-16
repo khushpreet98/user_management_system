@@ -15,18 +15,16 @@ jobs:
       id: vars
       run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
+    - uses: mr-smithers-excellent/docker-build-push@v5
+      name: Build & push Docker image
       with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+        image: ${{ secrets.DOCKERHUB_REPOSITORY }}
         tags: ${{ steps.vars.outputs.sha_short }}
+        registry: registry.hub.docker.com
+        dockerfile: Dockerfile
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}  
         
-    - name: Build image
-      run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ tags }}
-    - name: push image
-      run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ tags }}
-      
     - name: Check out to repository user-management
       uses: actions/checkout@v2      
       with:
