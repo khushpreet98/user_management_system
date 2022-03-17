@@ -29,7 +29,7 @@ jobs:
     - name: Check out to repository user-management
       uses: actions/checkout@v2      
       with:
-        repository: khushpreet98/user-management
+        repository: ${{ secrets.DOCKERHUB_REPOSITORY }}
         token: ${{ secrets.token }}
         ref: master
         
