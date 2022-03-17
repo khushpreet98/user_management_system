@@ -22,9 +22,9 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         
     - name: Build image
-      run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.vars.outputs.sha_short }}
+      run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:ci-${{ steps.vars.outputs.sha_short }}
     - name: push image
-      run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.vars.outputs.sha_short }}
+      run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:ci-${{ steps.vars.outputs.sha_short }}
       
     - name: Check out to repository user-management
       uses: actions/checkout@v2      
@@ -35,7 +35,7 @@ jobs:
         
     - name: update helm manifest in values.yaml
       if: github.ref == 'refs/heads/master'
-      run: yq -i  eval '.images.repository= "${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.vars.outputs.sha_short }}"' valuess.yaml
+      run: yq -i  eval '.images.repository= "${{ secrets.DOCKERHUB_REPOSITORY }}:ci-${{ steps.vars.outputs.sha_short }}"' valuess.yaml
 
     - name: update helm manifest in values-test.yaml
       if: github.ref == 'refs/heads/Dockerfile'
