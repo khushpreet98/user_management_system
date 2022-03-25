@@ -1,0 +1,53 @@
+name: Build and push docker image
+on: 
+  push:
+    branches:
+    - '**'
+
+jobs:
+  build-push-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out to main repository
+      uses: actions/checkout@v2
+  #  - name: Set outputs
+  #    id: vars
+   #   run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+    - name: Get the version
+      id: get_version
+      run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}  
+    - name: Get the tag name
+      run: echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        
+    - name: Build image
+      run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.get_version.outputs.VERSION }}
+    - name: push image
+      run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.get_version.outputs.VERSION }}
+      
+    - name: Check out to repository user-management
+      uses: actions/checkout@v2      
+      with:
+        repository: khushpreet98/user-management
+        token: ${{ secrets.token }}
+        ref: master
+        
+    - name: update helm manifest in values.yaml
+      if: github.ref == 'refs/heads/master'
+      run: yq -i  eval '.images.repository= "${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.get_version.outputs.VERSION }}"' values.yaml
+
+    - name: update helm manifest in values-test.yaml
+      if: github.ref == 'refs/heads/master'
+      run: yq -i  eval '.images.repository= "${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.get_version.outputs.VERSION }}"' values-test.yaml
+            
+    - name: Commit files
+      run: |
+        git config user.email "khushpreet@wanclouds.net"
+        git config user.name "khushpreet98"
+        git commit -am "update image tag with latest commit id"
+        git push origin master
