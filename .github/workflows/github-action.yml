@@ -28,11 +28,11 @@ jobs:
       run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.vars.outputs.sha_short }}
       
     - name: Check out to repository user-management
-      uses: actions/checkout@v2      
-      with:
-        repository: khushpreet98/user-management
-        token: ${{ secrets.token }}
-        ref: master
+      uses: khushpreet98/user-management@master     
+     # with:
+      #  repository: khushpreet98/user-management
+       # token: ${{ secrets.token }}
+       # ref: master
         
     - name: update helm manifest in values.yaml
       if: github.ref == 'refs/heads/master'
