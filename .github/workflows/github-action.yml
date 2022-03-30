@@ -36,11 +36,11 @@ jobs:
         
     - name: update helm manifest in values.yaml
       if: github.ref == 'refs/heads/master'
-      run: yq -i  eval '.images.repository= "${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.get_version.outputs.VERSION }}"' values.yaml
+      run: yq -i  eval '.images.repository= "${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.vars.outputs.sha_short }}"' values.yaml
 
     - name: update helm manifest in values-test.yaml
       if: github.ref == 'refs/heads/master'
-      run: yq -i  eval '.images.repository= "${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.get_version.outputs.VERSION }}"' values-test.yaml
+      run: yq -i  eval '.images.repository= "${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.vars.outputs.sha_short }}"' values-test.yaml
             
     - name: Commit files
       run: |
