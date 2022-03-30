@@ -28,6 +28,7 @@ jobs:
       run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.vars.outputs.sha_short }}
       
     - name: Check out to repository user-management
+      uses: actions/checkout@v2      
       with:
         repository: khushpreet98/user-management
         token: ${{ secrets.token }}
