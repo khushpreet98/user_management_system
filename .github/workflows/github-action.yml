@@ -1,15 +1,24 @@
 name: Build and push docker image
-on: push
+on: [ push ]
+
 jobs:
-  build:
+  build-push-deploy:
     runs-on: ubuntu-latest
 
     steps:
     - name: Check out to main repository
       uses: actions/checkout@v2
-    - name: Set outputs
-      id: vars
+      
+    - name: Get the short commit id
+      id: imagetag
       run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+      
+    - name: Get the branch name
+      id: branchname
+    #  run: echo "::set-output name=branch::${GITHUB_REF#refs/tags/}"
+      run: echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
+    - name: test 
+      run: echo 'The branch name is' $branch
 
     - name: Login to Docker Hub
       uses: docker/login-action@v1
@@ -18,9 +27,9 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         
     - name: Build image
-      run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.vars.outputs.sha_short }}
+      run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.branchname.outputs.branch }}-${{ steps.imagetag.outputs.sha_short }}
     - name: push image
-      run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.vars.outputs.sha_short }}
+      run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.branchname.outputs.branch }}-${{ steps.imagetag.outputs.sha_short }}
       
     - name: Check out to repository user-management
       uses: actions/checkout@v2      
@@ -29,17 +38,17 @@ jobs:
         token: ${{ secrets.token }}
         ref: master
         
-    - name: simple evaluation on master
+    - name: update helm manifest in values.yaml
       if: github.ref == 'refs/heads/master'
-      run: yq -i  eval '.images.repository= "${{ secrets.DOCKER_USERNAME }}/user_management_system:${{ steps.vars.outputs.sha_short }}"' values.yaml
+      run: yq -i  eval '.images.repository= "${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.branchname.outputs.branch }} - ${{ steps.imagetag.outputs.sha_short }}"' values.yaml
 
-    - name: simple evaluation on Dockerfile
-      if: github.ref == 'refs/heads/Dockerfile'
-      run: yq -i  eval '.image.repository= "${{ secrets.DOCKER_USERNAME }}/user_management_system:${{ steps.vars.outputs.sha_short }}"' values-test.yaml
+    - name: update helm manifest in values-test.yaml
+      if: github.ref == 'refs/heads/master'
+      run: yq -i  eval '.images.repository= "${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.branchname.outputs.branch }} - ${{ steps.imagetag.outputs.sha_short }}"' values-test.yaml
             
     - name: Commit files
       run: |
         git config user.email "khushpreet@wanclouds.net"
         git config user.name "khushpreet98"
-        git commit -am "update image tag with latest commit id"
+        git commit -am "update image tag with latest commit id ${{ steps.branchname.outputs.branch }}-${{ steps.imagetag.outputs.sha_short }}"
         git push origin master
