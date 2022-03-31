@@ -1,7 +1,5 @@
 name: Build and push docker image
 on: [ push ]
-env:
-  SHORTSHA: $(git rev-parse --short=4 ${{ github.sha }})
   
 jobs:
   build-push-deploy:
