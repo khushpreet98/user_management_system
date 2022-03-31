@@ -22,9 +22,9 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         
     - name: Build image
-      run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ SHORTSHATEST }}
+      run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ env.SHORTSHATEST }}
     - name: push image
-      run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ SHORTSHATEST }}
+      run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ env.SHORTSHATEST }}
       
     - name: Check out to repository user-management
       uses: actions/checkout@v2      
