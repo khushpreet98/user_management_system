@@ -18,7 +18,7 @@ jobs:
     #  run: echo "::set-output name=branch::${GITHUB_REF#refs/tags/}"
       run: echo "::set=output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
     - name: test 
-      run: echo 'The branch name is' $BRANCH_NAME
+      run: echo 'The branch name is' $branch
 
     - name: Login to Docker Hub
       uses: docker/login-action@v1
