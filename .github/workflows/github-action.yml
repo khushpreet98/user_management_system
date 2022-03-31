@@ -14,10 +14,9 @@ jobs:
       run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
       
     - name: Get the branch name
-   #   id: branchname
+      id: branchname
     #  run: echo "::set-output name=branch::${GITHUB_REF#refs/tags/}"
-      run: echo "::set-env name=BRANCH_NAME::$(echo ${GITHUB_REF#refs/heads/})"
-      id: extract_branch    
+      run: echo "::set=output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
     - name: test 
       run: echo 'The branch name is' $BRANCH_NAME
 
