@@ -43,7 +43,7 @@ jobs:
       run: yq -i  eval '.images.repository= "${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.branchname.outputs.branch }} - ${{ steps.imagetag.outputs.sha_short }}"' values.yaml
 
     - name: update helm manifest in values-test.yaml
-      if: github.ref == 'refs/heads/master'
+      if: github.ref == 'refs/heads/Dockerfile'
       run: yq -i  eval '.images.repository= "${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.branchname.outputs.branch }} - ${{ steps.imagetag.outputs.sha_short }}"' values-test.yaml
             
     - name: Commit files
