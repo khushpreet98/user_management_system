@@ -11,16 +11,13 @@ jobs:
       
     - name: Get the short commit id
       id: image-tag
-      run: 
-        echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+      run: |
+        echo "::set-output name=sha_short::$(git rev-parse --short HEAD)" >> $GITHUB_ENV
       
     - name: Get the branch name
       run: |
-        echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" 
+        echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
         echo "branch is" $BRANCH_NAME
-
-       # branchnm=${GITHUB_REF#refs/heads/}
-       # branch="${branchnm/\//-}" >> $GITHUB_ENV
 
     - name: Login to Docker Hub
       uses: docker/login-action@v1
@@ -29,9 +26,9 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         
     - name: Build image
-      run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ env.BRANCH_NAME }}-${{ steps.image-tag.outputs.sha_short }}
+      run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ env.BRANCH_NAME }}-${{ env.sha_short }}
     - name: push image
-      run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.branchname.outputs.branch }}-${{ steps.image-tag.outputs.sha_short }}
+      run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ env.BRANCH_NAME }}-${{ steps.image-tag.outputs.sha_short }}
              
     - name: Check out to repository user-management
       uses: actions/checkout@v2      
@@ -42,15 +39,15 @@ jobs:
         
     - name: update helm manifest in values.yaml
       if: github.ref == 'refs/heads/master'
-      run: yq -i  eval '.images.repository= "${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.branchname.outputs.branch }} - ${{ steps.imagetag.outputs.sha_short }}"' values.yaml
+      run: yq -i  eval '.images.repository= "${{ secrets.DOCKERHUB_REPOSITORY }}:${{ env.BRANCH_NAME }} - ${{ steps.imagetag.outputs.sha_short }}"' values.yaml
 
     - name: update helm manifest in values-test.yaml
       if: github.ref == 'refs/heads/added/jenkinsfile'
-      run: yq -i  eval '.images.repository= "${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.branchname.outputs.branch }} - ${{ steps.imagetag.outputs.sha_short }}"' values-test.yaml
+      run: yq -i  eval '.images.repository= "${{ secrets.DOCKERHUB_REPOSITORY }}:${{ env.BRANCH_NAME }} - ${{ steps.imagetag.outputs.sha_short }}"' values-test.yaml
             
     - name: Commit files
       run: |
         git config user.email "khushpreet@wanclouds.net"
         git config user.name "khushpreet98"
-        git commit -am "update image tag with latest commit id ${{ steps.branchname.outputs.branch }} - ${{ steps.image-tag.outputs.sha_short }}"
+        git commit -am "update image tag with latest commit id ${{ env.BRANCH_NAME }}- ${{ steps.image-tag.outputs.sha_short }}"
         git push origin master
