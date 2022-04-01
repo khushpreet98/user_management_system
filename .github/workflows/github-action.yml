@@ -18,7 +18,7 @@ jobs:
     #  run: echo "::set-output name=branch::${GITHUB_REF#refs/tags/}"
       run: |
         echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
-        branch="${GITHUB_REF#refs/heads//\//-}"
+        BRANCH="${GITHUB_REF#refs/heads//\//-}"
         echo $BRANCH
        
        
