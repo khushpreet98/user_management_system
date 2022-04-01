@@ -17,7 +17,7 @@ jobs:
     - name: Get the branch name
       run: |
         branchnm=${GITHUB_REF#refs/heads/}
-        branch="${branchnm/\//-}"
+        branch="${branchnm/\//-}" >> $GITHUB_ENV
         echo "branch is" $branch
 
     - name: Login to Docker Hub
@@ -27,7 +27,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         
     - name: Build image
-      run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:$branch-${{ steps.image-tag.outputs.sha_short }}
+      run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ env.branch }}-${{ steps.image-tag.outputs.sha_short }}
     - name: push image
       run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.branchname.outputs.branch }}-${{ steps.image-tag.outputs.sha_short }}
              
