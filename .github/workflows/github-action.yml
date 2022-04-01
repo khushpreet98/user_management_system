@@ -19,7 +19,7 @@ jobs:
       run: |
         #echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads//\//-})"
         BITBUCKET_BRANCH=${GITHUB_REF#refs/heads}
-        branch="${BITBUCKET_BRANCH//\//-}"
+        branch="${BITBUCKET_BRANCH/\//-}"
         echo "branch is" $branch 
 
     - name: Login to Docker Hub
