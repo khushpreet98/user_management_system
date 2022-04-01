@@ -12,9 +12,11 @@ jobs:
     - name: Get the short commit id
       id: image-tag
       run: |
+        echo " - ${{ env.GITHUB_SHA_SHORT }}"
         echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-        echo "sha_short=$(echo ${git rev-parse --short HEAD})" >> $GITHUB_ENV
-        echo $sha_short
+        echo "sha_short=$(echo ${git rev-parse --short HEAD})"
+
+        
     - name: Get the branch name
       run: |
         echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
