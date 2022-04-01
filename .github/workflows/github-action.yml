@@ -11,9 +11,7 @@ jobs:
       
     - name: Get the short commit id
       id: image-tag
-      run: |
-        echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-        echo "sha_short=$(echo ${git rev-parse --short HEAD})"
+      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
         
     - name: Get the branch name
       run: |
