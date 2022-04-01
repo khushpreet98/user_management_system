@@ -15,12 +15,7 @@ jobs:
       
     - name: Get the branch name
       id: branchname
-    #  run: echo "::set-output name=branch::${GITHUB_REF#refs/tags/}"
-      run: |
-        BRANCH="${GITHUB_REF#refs/heads//\//-}"
-        echo $BRANCH
-    #    echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
-       
+      run: echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads//\//-})"
        
     - name: Login to Docker Hub
       uses: docker/login-action@v1
@@ -29,10 +24,10 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         
     - name: Build image
-      run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ BRANCH }}-${{ steps.image-tag.outputs.sha_short }}
+      run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.branchname.outputs.branch }}-${{ steps.image-tag.outputs.sha_short }}
     - name: push image
       run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.branchname.outputs.branch }}-${{ steps.image-tag.outputs.sha_short }}
-      
+             
     - name: Check out to repository user-management
       uses: actions/checkout@v2      
       with:
