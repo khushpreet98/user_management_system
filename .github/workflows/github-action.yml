@@ -15,7 +15,6 @@ jobs:
         echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
       
     - name: Get the branch name
-      id: branchname
       run: |
         branchnm=${GITHUB_REF#refs/heads/}
         branch="${branchnm/\//-}"
@@ -28,7 +27,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         
     - name: Build image
-      run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.branchname.outputs.branch }}-${{ steps.image-tag.outputs.sha_short }}
+      run:  docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ branch }}-${{ steps.image-tag.outputs.sha_short }}
     - name: push image
       run:  docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ steps.branchname.outputs.branch }}-${{ steps.image-tag.outputs.sha_short }}
              
