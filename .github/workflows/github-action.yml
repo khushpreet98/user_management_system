@@ -38,15 +38,15 @@ jobs:
         
     - name: update helm manifest in values.yaml
       if: github.ref == 'refs/heads/master'
-      run: yq -i  eval '.images.repository= "${{ secrets.DOCKERHUB_REPOSITORY }}:${{ env.BRANCH_NAME }} - ${{ steps.image-tag.outputs.sha_short }}"' values.yaml
+      run: yq -i  eval '.images.repository= "${{ secrets.DOCKERHUB_REPOSITORY }}:${{ env.BRANCH_NAME }}-${{ steps.image-tag.outputs.sha_short }}"' values.yaml
 
     - name: update helm manifest in values-test.yaml
       if: github.ref == 'refs/heads/added/jenkinsfile'
-      run: yq -i  eval '.images.repository= "${{ secrets.DOCKERHUB_REPOSITORY }}:${{ env.BRANCH_NAME }} - ${{ steps.image-tag.outputs.sha_short }}"' values-test.yaml
+      run: yq -i  eval '.images.repository= "${{ secrets.DOCKERHUB_REPOSITORY }}:${{ env.BRANCH_NAME }}-${{ steps.image-tag.outputs.sha_short }}"' values-test.yaml
             
     - name: Commit files
       run: |
         git config user.email "khushpreet@wanclouds.net"
         git config user.name "khushpreet98"
-        git commit -am "update image tag with latest commit id ${{ env.BRANCH_NAME }}- ${{ steps.image-tag.outputs.sha_short }}"
+        git commit -am "update image tag with latest commit id ${{ env.BRANCH_NAME }}-${{ steps.image-tag.outputs.sha_short }}"
         git push origin master
