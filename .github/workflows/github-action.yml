@@ -4,6 +4,8 @@ on: [ push ]
 jobs:
   build-push-deploy:
     runs-on: ubuntu-latest
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
     steps:
     - name: Check out to main repository
@@ -50,3 +52,11 @@ jobs:
         git config user.name "khushpreet98"
         git commit -am "update image tag with latest commit id ${{ env.BRANCH_NAME }}-${{ steps.image-tag.outputs.sha_short }}"
         git push origin master
+        
+    - name: Notify workflows status to Slack
+    - uses: act10ns/slack@v1
+      with:
+        status: ${{ job.status }}
+        steps: ${{ toJson(steps) }}
+        channel: '#percona-db'
+      if: always()
