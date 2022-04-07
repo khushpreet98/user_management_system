@@ -57,6 +57,6 @@ jobs:
       uses: 8398a7/action-slack@v3
       with:
         status: ${{ job.status }}
-        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
+        fields: repo,message,commit,author,eventName,ref,workflow,job,took
         channel: '#github-workflows'
       if: always()
