@@ -49,7 +49,7 @@ jobs:
     - name: Commit files
       run: |
         git config user.email "khushpreet@wanclouds.net"
-        git config user.name "khushpreet98"
+        git config user.name "${{ github.actor }}"
         git commit -am "update image tag with latest commit id ${{ env.BRANCH_NAME }}-${{ steps.image-tag.outputs.sha_short }}"
         git push origin master
         
